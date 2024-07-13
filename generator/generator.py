@@ -1,4 +1,4 @@
-from spangram_placement_strategy import SpangramPlacementStrategy
+from spangram_placement_strategies import SpangramPlacementStrategy
 
 
 class BoardGenerator:
@@ -28,7 +28,7 @@ class BoardGenerator:
 
     def place_spangram(self, spangram: str):
         for ch in spangram:
-            row, col = self.spangram_placement_strategy.place_spangram_letter(index, spangram, board_state)
+            row, col = self.spangram_placement_strategy.get_next_spangram_letter_position(index, spangram, board_state)
 
     def get_split_board_counts(self) -> list[int]:
         return [1, 2]
