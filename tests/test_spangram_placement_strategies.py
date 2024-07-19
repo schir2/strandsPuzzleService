@@ -1,9 +1,7 @@
 import unittest
-from unittest.mock import patch
 
-from generator.spangram_placement_strategies import LeftToRightStrategy, RightToLeftStrategy, UpToDownStrategy, \
-    DownToUpStrategy
-
+from generator.spangram_placement_strategies import LeftToRightStrategy, RightToLeftStrategy, TopToBottomStrategy, \
+    BottomToTopStrategy
 
 
 class TestSpangramPlacementStrategies(unittest.TestCase):
@@ -15,49 +13,37 @@ class TestSpangramPlacementStrategies(unittest.TestCase):
         self.board = [[None for _ in range(self.cols)] for _ in range(self.rows)]
 
     def test_left_to_right_strategy(self):
-        strategy = LeftToRightStrategy(self.rows, self.cols, self.spangram, self.board)
+        strategy = LeftToRightStrategy(self.rows, self.cols, self.spangram)
         self.assertEqual(strategy.direction, (0, 1))
 
         self.assertEqual(strategy.distance_form_end(2, 2), 3)
 
-        row, col = strategy.select_starting_position()
-        self.assertGreaterEqual(row, 0)
-        self.assertLess(row, self.rows)
-        self.assertEqual(col, 0)
+        starting_positions = strategy.starting_positions()
+        self.assertEqual(starting_positions, [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)])
 
     def test_right_to_left_strategy(self):
-        strategy = RightToLeftStrategy(self.rows, self.cols, self.spangram, self.board)
+        strategy = RightToLeftStrategy(self.rows, self.cols, self.spangram)
         self.assertEqual(strategy.direction, (0, -1))
 
         self.assertEqual(strategy.distance_form_end(2, 2), 2)
 
-        row, col = strategy.select_starting_position()
-        self.assertGreaterEqual(row, 0)
-        self.assertLess(row, self.rows)
-        self.assertEqual(col, self.cols - 1)
+        starting_positions = strategy.starting_positions()
+        self.assertEqual(starting_positions, [(0, 4), (1, 4), (2, 4), (3, 4), (4, 4)])
 
     def test_up_to_down_strategy(self):
-        strategy = UpToDownStrategy(self.rows, self.cols, self.spangram, self.board)
+        strategy = TopToBottomStrategy(self.rows, self.cols, self.spangram)
         self.assertEqual(strategy.direction, (1, 0))
 
         self.assertEqual(strategy.distance_form_end(2, 2), 3)
 
-        row, col = strategy.select_starting_position()
-        self.assertEqual(row, 0)
-        self.assertGreaterEqual(col, 0)
-        self.assertLess(col, self.cols)
+        starting_positions = strategy.starting_positions()
+        self.assertEqual(starting_positions, [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)])
 
     def test_down_to_up_strategy(self):
-        strategy = DownToUpStrategy(self.rows, self.cols, self.spangram, self.board)
+        strategy = BottomToTopStrategy(self.rows, self.cols, self.spangram)
         self.assertEqual(strategy.direction, (-1, 0))
 
         self.assertEqual(strategy.distance_form_end(2, 2), 2)
 
-        row, col = strategy.select_starting_position()
-        self.assertEqual(row, self.rows - 1)
-        self.assertGreaterEqual(col, 0)
-        self.assertLess(col, self.cols)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        starting_positions = strategy.starting_positions()
+        self.assertEqual(starting_positions, [(4, 0), (4, 1), (4, 2), (4, 3), (4, 4)])
